@@ -3,8 +3,6 @@ import platform
 def identificar_so():
     sistema = platform.system()
     release = platform.release()
-    
-    # ids = [distro["ID"]]
 
     if 'Windows' in sistema:
         print(f'Sistema Operacional: {sistema}')
