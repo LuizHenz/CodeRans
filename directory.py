@@ -8,3 +8,6 @@ def criar_diretorio(caminho, nome):
         print(f'Diretório criado: {end_comp}')
     except OSError as error:
         print(f'Erro: {error}')
+
+def user_name():
+    return os.getenv('USER') or os.getenv('LOGNAME')

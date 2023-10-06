@@ -1,14 +1,69 @@
+import os
 from so import identificar_so
-from directory import criar_diretorio
+from directory import user_name
+from cryptography.fernet import Fernet
 
 so = identificar_so()
 
-if 'Linux' == so:
-    endereco = '/home/k4rma/Documentos'
-    nome_diretorio = 'teste'
-    criar_diretorio(endereco,nome_diretorio)
-# else:
-#     endereco_win = 'C:\Users\<usuario>\Documents'
-#     nome_diretorio_win = 'teste'
-#     criar_diretorio(endereco_win,nome_diretorio_win)
+def generate_key():
+    return Fernet.generate_key()
 
+def load_key(key_path):
+    with open(key_path, 'rb') as key_file:
+        return key_file.read()
+
+def save_key(key, key_path):
+    with open(key_path, 'wb') as key_file:
+        return key_file.write(key)
+
+def encrypt_file(file_path, key, output_path):
+    with open(file_path, 'rb') as file:
+        data = file.read()
+
+    ciper_suit = Fernet(key)
+    encrypted_data = ciper_suit.encrypt(data) 
+
+    with open(output_path, 'wb') as encrypted_file:
+        encrypted_file.write(encrypted_data)
+
+def decrypt_file(encrypted_path, key, output_path):
+    with open(encrypted_path, 'rb') as encrypted_file:
+        encrypted_data = encrypted_file.read()
+
+    cipher_suite = Fernet(key)
+    decrypted_data = cipher_suite.decrypt(encrypted_data)
+
+    with open(output_path, 'wb') as decrypted_file:
+        decrypted_file.write(decrypted_data)
+
+nome = user_name()
+diretorio_path = f'/home/{nome}/Documentos/teste'
+
+
+key_path = 'key.key'
+if os.path.exists(key_path):
+    key = load_key(key_path)
+else:
+    key = generate_key()
+    save_key(key, key_path)
+
+for filename in os.listdir(diretorio_path):
+    if os.path.isfile(os.path.join(diretorio_path, filename)):
+        file_path = os.path.join(diretorio_path, filename)
+        output_path = os.path.join(diretorio_path, f'encrypted_{filename}')
+        encrypt_file(file_path, key, output_path)
+        print(f'Arquivo {filename} criptografado com sucesso.')
+
+        if not filename.startswith('encrypted_'):
+            os.remove(file_path)
+            print(f'Arquivo original {filename} removido.')
+
+for filename in os.listdir(diretorio_path):
+    if filename.startswith('encrypted_'):
+        encrypted_file_path = os.path.join(diretorio_path, filename)
+        decrypted_file_path = os.path.join(diretorio_path, filename[len('encrypted_'):])
+        decrypt_file(encrypted_file_path, key, decrypted_file_path)
+        print(f'Arquivo {filename} descriptografado.')
+
+
+print('Processo de criptografia realizado com sucesso')

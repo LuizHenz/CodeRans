@@ -1,4 +1,4 @@
 config.ini
 *.tmp
-/__ptcache__/
+__ptcache__/
 /key.key
