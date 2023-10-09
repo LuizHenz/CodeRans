@@ -1,7 +1,34 @@
-import os
-from so import identificar_so
-from directory import user_name
 from cryptography.fernet import Fernet
+import os
+import platform
+
+def identificar_so():
+    sistema = platform.system()
+    release = platform.release()
+
+    if 'Windows' in sistema:
+        print(f'Sistema Operacional: {sistema}')
+        print(f'Release: {release}')
+    elif 'Linux' in sistema:
+        distro = platform.freedesktop_os_release()
+        print(distro['NAME'], distro['VERSION'])
+    else:
+        print(f'Sistema Operacional não reconhecido: {sistema}')
+    
+    return sistema
+
+
+def criar_diretorio(caminho, nome):
+    end_comp = os.path.join(caminho, nome)
+
+    try:
+        os.makedirs(end_comp)
+        print(f'Diretório criado: {end_comp}')
+    except OSError as error:
+        print(f'Erro: {error}')
+
+def user_name():
+    return os.getenv('USER') or os.getenv('LOGNAME')
 
 so = identificar_so()
 
