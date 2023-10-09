@@ -2,3 +2,6 @@ config.ini
 *.tmp
 __ptcache__/
 /key.key
+build/
+venv/
+main.spec
