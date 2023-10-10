@@ -3,7 +3,10 @@ import os
 import platform
 
 def user_name():
-    return os.getenv('USER') or os.getenv('LOGNAME')
+    if os.name == 'posix':
+        return os.getenv('USER') 
+    elif os.name == 'nt':    
+        return os.getenv('USERNAME')
 
 def generate_key():
     return Fernet.generate_key()
