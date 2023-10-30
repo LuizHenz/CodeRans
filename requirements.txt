@@ -1,1 +1,2 @@
 cryptography==38.0.4
+Pillow==10.1.0
