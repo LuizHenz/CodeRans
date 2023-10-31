@@ -1,19 +1,28 @@
-# -*- mode: python ; coding: utf-8 -*-
+# -- mode: python ; coding: utf-8 --
 
+block_cipher = None
 
 a = Analysis(
-    ['rans.py'],
+    ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[('requirements.txt', '.'), ('install_deps.sh', '.'), ('pacote', './pacote')],
-    hiddenimports=[],
+    datas=[
+        ('requirements.txt', '.'),
+        ('install_deps.sh', '.'),
+        ('pacote', './pacote'),
+        # Aqui está a adição para o Pillow
+        ('./venv/lib/python3.11/site-packages/PIL/**', 'PIL')
+    ],
+    hiddenimports=[
+        'PIL._tkinter_finder'  # Adiciona a dependência escondida do Pillow
+    ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
     excludes=[],
     noarchive=False,
 )
-pyz = PYZ(a.pure)
+pyz = PYZ(a.pure, cipher=block_cipher)
 
 exe = EXE(
     pyz,
