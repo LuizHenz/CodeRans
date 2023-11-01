@@ -17,8 +17,6 @@ pip install -r requirements.txt
 ```
 ### Gere o executável com PyInstaller:
 ```
-pyinstaller --onefile --add-data "requirements.txt:." main.py
-
-pyinstaller --onefile --add-data "requirements.txt:." --add-data "install_deps.sh:." --add-data "pacote:./pacote" main.py
+pyinstaller rans.spec
 ```
  Os executáveis serão gerados no diretório 'dist'.
