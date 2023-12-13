@@ -118,13 +118,13 @@ def exibir_conscientizacao():
     janela.geometry("1920x1080")
     janela.overrideredirect(True)
 
-    imagem_fundo = Image.open("/home/vitorkl/Downloads/fundo.jpeg")
+    imagem_fundo = Image.open("imagens/fundo.jpeg")
     imagem_fundo = ImageTk.PhotoImage(imagem_fundo)
 
     label_fundo = tk.Label(janela, image=imagem_fundo)
     label_fundo.place(relwidth=1,relheight=1)
 
-    cadeado = Image.open("/home/vitorkl/Downloads/cadeado.png")
+    cadeado = Image.open("imagens/cadeado.png")
     cadeado = cadeado.resize((253,274))
     imagem_cadeado = ImageTk.PhotoImage(cadeado)
 
