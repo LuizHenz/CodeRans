@@ -4,4 +4,5 @@ __ptcache__/
 /key.key
 build/
 venv/
+dist/
 main.spec
